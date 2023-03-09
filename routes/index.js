@@ -1,12 +1,10 @@
-const express = require("express")
-const app = express()
+const express = require('express');
+const router = express.Router();
+const { getStatus, getStats } = require('../controllers/AppController');
 
 
-app.get("/status", (req, res) => {
-    console.log("To get status information")
-})
+router.get('/status', getStatus);
+router.get('/stats', getStats);
 
 
-app.get("/stats", (req, res) => {
-    console.log("To get stats information")
-})
+module.exports = router;

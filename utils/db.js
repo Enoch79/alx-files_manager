@@ -3,10 +3,11 @@ const { MongoClient } = require('mongodb');
 class DBClient {
   constructor() {
     const host = process.env.DB_HOST || 'localhost';
-    const port = process.env.DB_PORT || 2707;
+    const port = process.env.DB_PORT || 27017;
     const database = process.env.DB_DATABASE || 'files_manager';
 
-    const url = `mongodb://${host}:${port}/${database}`;
+    // const url = `mongodb://${host}:${port}/${database}`;
+    const url = 'mongodb://localhost:27017/file_manager';
 
     this.client = new MongoClient(url, { useUnifiedToPology: true });
 
