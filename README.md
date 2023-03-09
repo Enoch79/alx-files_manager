@@ -1,3 +1,3 @@
- A simple platform to upload and view files
+<img src="./ALX_LOGO.png" style="align-items: center;" />
 
-<img src="./ALX_LOGO.png" />
+ A simple platform to upload and view files
