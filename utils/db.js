@@ -1,42 +1,71 @@
-const { MongoClient } = require('mongodb');
+#!/usr/bin/python3
 
+isWinner = __import__('0-prime_game').isWinner
+import mongodb from 'mongodb';
+// eslint-disable-next-line no-unused-vars
+import Collection from 'mongodb/lib/collection';
+import envLoader from './env_loader';
+
+/**
+ * Represents a MongoDB client.
+ */
 class DBClient {
+  /**
+   * Creates a new DBClient instance.
+   */
   constructor() {
+    envLoader();
     const host = process.env.DB_HOST || 'localhost';
     const port = process.env.DB_PORT || 27017;
     const database = process.env.DB_DATABASE || 'files_manager';
+    const dbURL = `mongodb://${host}:${port}/${database}`;
 
-    // const url = `mongodb://${host}:${port}/${database}`;
-    const url = 'mongodb://localhost:27017/file_manager';
-
-    this.client = new MongoClient(url, { useUnifiedToPology: true });
-
+    this.client = new mongodb.MongoClient(dbURL, { useUnifiedTopology: true });
     this.client.connect();
-
-    this.db = this.client.db(database);
   }
 
-  async isAlive() {
-    try {
-      await this.client.isConnected();
-      return true;
-    } catch (error) {
-      return false;
-    }
+  /**
+   * Checks if this client's connection to the MongoDB server is active.
+   * @returns {boolean}
+   */
+  isAlive() {
+    return this.client.isConnected();
   }
 
+  /**
+   * Retrieves the number of users in the database.
+   * @returns {Promise<Number>}
+   */
   async nbUsers() {
-    const collection = this.db.collection('users');
-    const count = await collection.countDocuments();
-    return count;
+    return this.client.db().collection('users').countDocuments();
   }
 
+  /**
+   * Retrieves the number of files in the database.
+   * @returns {Promise<Number>}
+   */
   async nbFiles() {
-    const collection = this.db.collection('files');
-    const count = await collection.countDocuments();
-    return count;
+    return this.client.db().collection('files').countDocuments();
+  }
+
+  /**
+   * Retrieves a reference to the `users` collection.
+   * @returns {Promise<Collection>}
+   */
+  async usersCollection() {
+    return this.client.db().collection('users');
+  }
+
+  /**
+   * Retrieves a reference to the `files` collection.
+   * @returns {Promise<Collection>}
+   */
+  async filesCollection() {
+    return this.client.db().collection('files');
   }
 }
 
-const dbClient = new DBClient();
-module.exports = dbClient;
+export const dbClient = new DBClient();
+export default dbClient;
+
+print("Winner: {}".format(isWinner(5, [2, 5, 1, 4, 3])))
