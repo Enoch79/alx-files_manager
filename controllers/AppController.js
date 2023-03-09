@@ -1,20 +1,19 @@
-const mongoose = require('mongoose');
-const redisClient = require('../utils/redis');
-const User = require('../models/User');
-const File = require('../models/File');
+/* eslint-disable import/no-named-as-default */
+import redisClient from '../utils/redis';
+import dbClient from '../utils/db';
 
-const getStatus = async (req, res) => {
-  const redisStatus = await redisClient.pingAsync;
-  const dbStatus = mongoose.connection.readyState === 1;
-  const status = { redis: redisStatus === 'PONG', db: dbStatus };
-  res.status(200).json(status);
-};
+export default class AppController {
+  static getStatus(req, res) {
+    res.status(200).json({
+      redis: redisClient.isAlive(),
+      db: dbClient.isAlive(),
+    });
+  }
 
-const getStats = async (req, res) => {
-  const userCount = await User.countDocuments();
-  const fileCount = await File.countDocuments();
-  const stats = { users: userCount, files: fileCount };
-  res.status(200).json(stats);
-};
-
-module.exports = { getStatus, getStats };
+  static getStats(req, res) {
+    Promise.all([dbClient.nbUsers(), dbClient.nbFiles()])
+      .then(([usersCount, filesCount]) => {
+        res.status(200).json({ users: usersCount, files: filesCount });
+      });
+  }
+}
