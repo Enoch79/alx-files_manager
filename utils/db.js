@@ -1,6 +1,3 @@
-#!/usr/bin/python3
-
-isWinner = __import__('0-prime_game').isWinner
 import mongodb from 'mongodb';
 // eslint-disable-next-line no-unused-vars
 import Collection from 'mongodb/lib/collection';
@@ -67,5 +64,3 @@ class DBClient {
 
 export const dbClient = new DBClient();
 export default dbClient;
-
-print("Winner: {}".format(isWinner(5, [2, 5, 1, 4, 3])))
